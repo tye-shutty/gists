@@ -1,0 +1,4 @@
+:vs <path> 
+" creates a new vim file and opens it in this window
+:source ~/.vimrc
+" reloads vimrc
