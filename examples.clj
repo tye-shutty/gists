@@ -1,18 +1,18 @@
 ;;these code snipits and advice are not mine, I just copied these from various websites.
 
 (Character/isAlphabetic <int>)
-;True if char index is a letter 
+;True if char index is a letter
 
-(set! *warn-on-reflection* true) 
+(set! *warn-on-reflection* true)
 ;Put at beginning of file to check for slow code
 
-;;defn- 
+;;defn-
 (def ^:private foo 1)
 ;ns private
 ns-2=>(deref (var user/foo)) ;or @(var user/foo)
 ;1
 
-;;fn [a b & [c]] 
+;;fn [a b & [c]]
 ;discards input after c away
 (defn a [& {:keys [b] :as c}] (prn c (inc b)))
 (a :b 2)
@@ -31,7 +31,7 @@ ns-2=>(deref (var user/foo)) ;or @(var user/foo)
 (as-> 2 x (- x 4) (/ 3 x))
 ;=> -3/2
 
-(def <funcname> (memoize <func>)) 
+(def <funcname> (memoize <func>))
 ;Calling funcname will only run once for each unique argument, else return cached result
 
 ;;java
@@ -50,7 +50,7 @@ ns-2=>(deref (var user/foo)) ;or @(var user/foo)
 java.lang.Thread$UncaughtExceptionHandler
 ;$ used to refer to inner classes
  ;java uses a dot in the class name: Thread.UncaughtExceptionHandler
- 
+
 (.run (fn [] (pr "hi") (inc 3)))
 ;"hi"nil
 (.call (fn [] (pr "hi") (inc 3)))
@@ -58,6 +58,19 @@ java.lang.Thread$UncaughtExceptionHandler
 
 (Character/getNumericValue \0)
 ;0 ;\a = 10 etc
+
+(keys (System/getenv))
+;("PATH" "JAVA_HOME" "TERM" "LANG" "JRE_HOME" "CATALINA_BASE" "JETTY_HOME" "JAVA_MAIN_CLASS_3006" "LOGNAME" "XPC_SERVICE_NAME" "PWD" "TERM_PROGRAM_VERSION" "SHELL" "TERM_PROGRAM" "LSCOLORS" "CATALINA_HOME" "USER" "CLICOLOR" "TMPDIR" "SSH_AUTH_SOCK" "XPC_FLAGS" "TERM_SESSION_ID" "M2_HOME" "__CF_USER_TEXT_ENCODING" "Apple_PubSub_Socket_Render" "HOME" "SHLVL")
+(System/getenv "PWD")
+;"/Users/tshutty/gists"
+(. System nanoTime) ;also currentTimeMillis since 1970
+;49208602330574 relative to arbitrary origin
+(System/setProperty "THE_MOST_BEAUTIFUL" "you")
+;nil
+(System/setProperty "THE_MOST_BEAUTIFUL" "me")
+;"you"
+(keys (System/getProperties))
+;("java.runtime.name" "sun.boot.library.path" "java.vm.version" "gopherProxySet" "java.vm.vendor" "java.vendor.url" "path.separator" "java.vm.name" "file.encoding.pkg" "user.country" "sun.java.launcher" "sun.os.patch.level" "java.vm.specification.name" "user.dir" "java.runtime.version" "java.awt.graphicsenv" "java.endorsed.dirs" "os.arch" "java.io.tmpdir" "line.separator" "java.vm.specification.vendor" "os.name" "sun.jnu.encoding" "java.library.path" "java.specification.name" "java.class.version" "sun.management.compiler" "THE_MOST_BEAUTIFUL" "os.version" "http.nonProxyHosts" "user.home" "user.timezone" "java.awt.printerjob" "file.encoding" "java.specification.version" "java.class.path" "user.name" "clojure.libfile" "java.vm.specification.version" "sun.java.command" "java.home" "sun.arch.data.model" "user.language" "java.specification.vendor" "awt.toolkit" "java.vm.info" "java.version" "java.ext.dirs" "sun.boot.class.path" "java.vendor" "file.separator" "java.vendor.url.bug" "sun.io.unicode.encoding" "sun.cpu.endian" "socksNonProxyHosts" "ftp.nonProxyHosts" "sun.cpu.isalist")
 
 ;;destructuring / dereferencing
 (let [{:keys [a c]} {:a 1 :b 2 :c 3} {:keys [d e]} {:d 4 :e 3}] (+ a d))
@@ -83,11 +96,11 @@ java.lang.Thread$UncaughtExceptionHandler
 ;[1 3]
 
 ;;deps.edn
-{:deps {clj-time {:mvn/version "0.14.2"} org.clojure/core.async {:mvn/version "0.4.500"}}
+{:deps {clj-time {:mvn/version "0.14.2"} org.clojure/core.async {:mvn/version "0.4.500"}}}
 ;;clj
 (require '[clj-time.core :as time] '[clojure.core.async :as a])
  ;seems to refer to the path to the ns relative to the src/ or src/main/clojure/
-;or {:deps {org.clojure/data.csv {:git/url "https://github.com/clojure/data.csv.git" :sha "e5beccad0bafdb8e78f19cba481d4ecef5fabf36"}}} 
+;or {:deps {org.clojure/data.csv {:git/url "https://github.com/clojure/data.csv.git" :sha "e5beccad0bafdb8e78f19cba481d4ecef5fabf36"}}}
 (use '[clojure.string :only [trim]])
 
  (ns <sym> (:use [clojure.string]))
@@ -98,13 +111,13 @@ java.lang.Thread$UncaughtExceptionHandler
 (cap "hIgh")
 ;"High"
 
-(defn test1 [{:keys [a b]}] (+ a b)) 
+(defn test1 [{:keys [a b]}] (+ a b))
 (test1 {:a 1 :b 2 :c 3})
-;;3 
+;;3
 
 (defrecord <Typename> [<varname1> ^<typefor2> <varname2> ...])
 ;type hints will not throw exceptions, just for documentation, shorthand for ^{:tag <typefor2>}
-;Given (defrecord TypeName ...), two factory functions will be defined: ->TypeName, taking positional parameters 
+;Given (defrecord TypeName ...), two factory functions will be defined: ->TypeName, taking positional parameters
 ;for the fields, and map->TypeName, taking a map of keywords to field values.
 (def <objectname> (<Typename>. <value1> <value2> ...))
 (:<varname1> <objectname>)
@@ -190,7 +203,7 @@ java.lang.Thread$UncaughtExceptionHandler
 ;3
 (create-ns '<symbol1>)
 (alias '<symbol2> '<symbol1>)
-(let [<symbol5> {::<symbol2>/<symbol3> <value> ::<symbol2>/<symbol4> <value} 
+(let [<symbol5> {::<symbol2>/<symbol3> <value> ::<symbol2>/<symbol4> <value}
       {:keys [::<symbol2>/<symbol3> ::<symbol2>/<symbol4>]} <symbol5>] <function>)
 ;;allows easy change of ns
 
@@ -235,7 +248,7 @@ java.lang.Thread$UncaughtExceptionHandler
 (find-ns 'user)
 ;#object[clojure.lang.Namespace 0x18230356 "user"]
 (ns-map 'user)
-;{primitives-classnames #'clojure.core/primitives-classnames, +' #'clojure.core/+'...} 
+;{primitives-classnames #'clojure.core/primitives-classnames, +' #'clojure.core/+'...}
 ;returns map of every symbol available
 
 (defprotocol A (inc-count [this]))
@@ -277,7 +290,7 @@ user=>(type C)
 user=>(isa? C java.lang.Object)
 ;true
 user=>(t/b (C.) "tye")
-;"hi tye" 
+;"hi tye"
 user=>(extend-protocol t/A C (b [this x] (str "cheers " x)))
 user=>(t/b (C.) "tye")
 ;"cheers tye" ;also overrides if done in same ns
@@ -301,7 +314,7 @@ user=>(b (C.) "tye")
 ;"sup: Assert failed: false"
 (map StackTraceElement->vec  (try (assert false) (catch AssertionError e (.getStackTrace e))))
 ;([user$eval276$fn__277 invoke "NO_SOURCE_FILE" 1] [user$eval276 invokeStatic "NO_SOURCE_FILE" 1]...)
- 
+
 (update-in {:a {:b 2}} [:a :b] / 3)
 ;{:a {:b 2/3}}
 (update-in [1 2 [1 2 3]] [2 0] inc)
@@ -346,7 +359,7 @@ user=>(b (C.) "tye")
 @f
 ;100 ;returns cached result
 (def b (delay (prn "hi") 100))
-@b
+@b ; or (force b)
 ;"hi"100
 @b
 ;100
@@ -359,7 +372,7 @@ user=>(b (C.) "tye")
 ;"hi" nil \nnil
 ;go block Asynchronously executes the body and creates channel for result
 ;go blocks are not bound to threads so you can make 1000s of channels with them
-(let [c1 (a/chan) c2 (a/chan)] 
+(let [c1 (a/chan) c2 (a/chan)]
  (a/go (while true (let [[v ch] (a/alts! [c1 c2])] (println "read" v "from" ch)))) ;listens to all channels at once
  (a/go (a/>! c1 "hi")) (a/go (a/>! c2 "u"))) ;does not require go blocks
 ;read u from #object[... \nread hi from ...
@@ -386,7 +399,7 @@ clojure one.clj
 (a/chan (a/dropping-buffer 10)) ;drops newest values when full
 (a/chan (a/sliding-buffer 10)) ;drops oldest values
 
-;;Your macro should output a list (form). The form will be evaluated when the macro is called (even if the form is quoted `). 
+;;Your macro should output a list (form). The form will be evaluated when the macro is called (even if the form is quoted `).
 (defmacro z [a] (list str "hi " a)) ;or  (defmacro z [a] `(str "hi " ~a)); or (defmacro z [a] (str "hi " a))
 (z "tye")
 ;"hi tye"
@@ -414,7 +427,7 @@ d
 ;2
 (defmacro c [d] `(defn ~d [] (inc 3)))
 ;d must have a tilde, or else it will evaluate d, and a symbol that points to a symbol, ie (def d (symbol "d")), is not valid
-;because inc is not tilda'd I can redefine inc after defmacro and it wont affect the operation 
+;because inc is not tilda'd I can redefine inc after defmacro and it wont affect the operation
 (c f)
 ;f is used as d
 (f)
@@ -436,7 +449,7 @@ d
 ;3
 (defmacro h4 [] (partial + 1 2))
 ((h4) 2)
-;No matching ctor 
+;No matching ctor
 ;;macros should return a symbolic expression
 (defmacro h4 [] `(partial + 1 2)) ;or (defmacro h4 [] '(partial + 1 2)) or (defmacro h4 [] (list partial + 1 2))
 ((h4) 2)
@@ -472,7 +485,7 @@ c
 ;5
 (defmacro show-env [] (println &env))
 (let [a :p b :t] (show-env))
-;{a #object[clojure.lang.Compiler$LocalBinding 0x38f116f6 clojure.lang.Compiler$LocalBinding@38f116f6], 
+;{a #object[clojure.lang.Compiler$LocalBinding 0x38f116f6 clojure.lang.Compiler$LocalBinding@38f116f6],
  ;b #object[clojure.lang.Compiler$LocalBinding 0x5286c33a clojure.lang.Compiler$LocalBinding@5286c33a]}
 (defmacro show-form [a b] (pr &form))
 (show-form :k :j)
@@ -494,9 +507,9 @@ c
 (str (user/b))
 ;"test"
 
- 
+
 (let [a 2] (cond (= a 1) "sup"))
-;nil 
+;nil
 (cond-> 1 (= 1 1) ((fn [x] (inc x))) (= -2 -2) ((fn [x] 4)) (= :a :a) inc true (/ 3) false (* 3))
 ;can't thread into test expressions, just threads into expressions after true tests
 ;5/3
@@ -581,7 +594,7 @@ b
 (.equals "hi" "hi")
 ;true
 
-;;binding is a more powerful let, in that the binding changes the var outside its scope, so if something in the 
+;;binding is a more powerful let, in that the binding changes the var outside its scope, so if something in the
 ;scope calls something outside, and that thing calls the var, it returns the rebound value
 
 (.startsWith "tye" "t")
@@ -611,7 +624,7 @@ b
 ;["init!" "pos: 0 val 3" "pos: 1 val 4" "pos: 2 val 5"]
 ;also works with maps
 (reduce (fn [t z] (reduced? (if (= z "z") (reduced "y") (+ z t)))) [1 2 "z"])
-;true 
+;true
 (reduced? (reduce (fn [t z] (if (= z "z") (reduced "y") (+ z t))) [1 2 "z"]))
 ;false
 (reduce-kv (fn [a x y] (+ (case x "a" (* 3 y) "b" (* 4 y)) a)) 0 {"a" 1 "b" 2})
@@ -625,7 +638,7 @@ b
 (apply str (remove #(= \t %) "thing"))
 ;"hing"
 (clojure.string/join ", " [1 2 3])
-;"1, 2, 3" 
+;"1, 2, 3"
 
 potemkin/import-macro
 ;Given a macro in another namespace, defines a macro with the same name in the current namespace.
@@ -676,32 +689,34 @@ potemkin/import-macro
 ;(1 2 3)
 
  ;;streams
-(with-open [r (clojure.java.io/input-stream "myfile.txt")] 
+(with-open [r (clojure.java.io/input-stream "myfile.txt")]
  (loop [c (.read r)] (if (not= c -1) (do (print (char c)) (recur (.read r))))))
-;Evaluates body in a try expression with names bound to the values of the inits, and a finally clause that calls 
+;Evaluates body in a try expression with names bound to the values of the inits, and a finally clause that calls
  ;(.close name) on each name in reverse order.
  (. (clojure.java.io/input-stream (byte-array (map (comp byte int) "hi"))) read)
  ;104
+(slurp (clojure.java.io/input-stream (byte-array (map (comp byte int) "hi"))))
+;"hi"
 
 (contains? #{:a #{}} #{}) ;or (contains? {:a #{}} :a)
 ;true ;doesn't work for lists
 (contains? [nil nil nil] 0)
 ;true ;checks index
- 
+
  (compare-and-set! atom oldval newval)
  ;Atomically sets the value of atom to newval if and only if thecurrent value of the atom is identical to oldval.
   ;Returns true if set happened, else false
- 
+
 (load-file "src/apr24/first.clj")
 ;all forms will evaluate ;If your data structures or a string in them grow bigger than around 65,535 it crashes.
 (ns apr24.first)
 ;or
 (alias 'f 'apr24.first)
- 
+
  (defn a [x] (str "a" x))
  (doto (a "s") (pr "b") (pr "c"))
  ;"as" "b""as" "c""as"
- 
+
  ;;boot show -p
  ;shows dep conflicts
  ;;boot show -d
@@ -730,10 +745,10 @@ potemkin/import-macro
 
  ((-> "first" symbol resolve) [1 2 3])
  ;1 ;without resolve returns nil (symbol is resolved as #'clojure.core/first)
- 
+
 (ns-name (the-ns (ns-name 'user)))
 ;user ;the-ns returns the ns object
- 
+
 (some-> 1 inc dec vector rest count (#(if (= 0 %) nil 2)) nil?)
 ;nil ;applies first to second param, then result of 2nd to 3rd param, etc, until a result is nil or returns final result
 (some #(% :a) [{:b 3} {:a 2}])
@@ -794,7 +809,7 @@ potemkin/import-macro
 ;4
 ;calculates only the first time dereferenced
 ;blocks subsequent threads from deref'ing
-;;If you want to run something in another thread, you pass a Runnable to the constructor of a Thread, then start it. 
+;;If you want to run something in another thread, you pass a Runnable to the constructor of a Thread, then start it.
 ;;Luckily, Clojure has thought of this. You can use a function of zero arguments directly as a Runnable.
 (.availableProcessors (Runtime/getRuntime))
 ;8
@@ -811,17 +826,17 @@ potemkin/import-macro
 ;also took 40 seconds
 (def pool (java.util.concurrent.Executors/newFixedThreadPool 2))
 ;2 threads is same speed as 8 on repl, for 30 sec programs
-(dotimes [x 8] (.submit ^java.util.concurrent.ExecutorService pool 
+(dotimes [x 8] (.submit ^java.util.concurrent.ExecutorService pool
                         ^Callable (fn [] (apply + (range 1000000000)) (prn "hi" x))))
 ;30 sec
 (def pool (java.util.concurrent.ForkJoinPool.))
-(defn recur-add [x] (proxy [java.util.concurrent.RecursiveTask] [] 
-                           (compute [] (if (< x 0) 
-                                         "end" 
-                                         (let [execute (recur-add (dec x))] 
-                                           (.fork execute) 
-                                           (apply + (range 1000000000)) 
-                                           (prn "hi" x) 
+(defn recur-add [x] (proxy [java.util.concurrent.RecursiveTask] []
+                           (compute [] (if (< x 0)
+                                         "end"
+                                         (let [execute (recur-add (dec x))]
+                                           (.fork execute)
+                                           (apply + (range 1000000000))
+                                           (prn "hi" x)
                                            (.join execute))))))
 (.invoke pool (recur-add 8))
 ;40sec
@@ -858,7 +873,7 @@ potemkin/import-macro
 (conj {:a 1} [:b 2] [:c 3]) ;or (assoc {:a 1} :b 2 :c 3)
 ;{:a 1, :b 2, :c 3} ;like a queue
 ;;conj sets have no order
-dissoc {:a "s" :b "e"} :a)
+(dissoc {:a "s" :b "e"} :a)
 ;{:b "e"}
 (select-keys {:a 1 :b 2 :c 3} [:a :c :d])
 ;{:a 1, :c 3}
@@ -866,21 +881,23 @@ dissoc {:a "s" :b "e"} :a)
 ;{:a 1 :b 2}
 (into {} [[:a 1][:b 2]])
 ;{:a 1 :b 2}
- 
+(find {:a 1} :a)
+;[:a 1]
+
 ;;Strings
 (clojure.string/split "t y" #"\s")
  ;["t" "y"]
 
 *file*
 ;"NO_SOURCE_PATH"
- 
+
 ;;multi-airity / overloading
  (defn rec ([a] (rec a (inc a))) ([a b] (list a b)))
  (rec 3)
  ;(3 4)
- 
-;;there are a new set of functions (volatile!, vswap!, vreset!, volatile?) to create and use volatile "boxes" to 
- ;hold state in stateful transducers. Volatiles are faster than atoms but give up atomicity guarantees so should 
+
+;;there are a new set of functions (volatile!, vswap!, vreset!, volatile?) to create and use volatile "boxes" to
+ ;hold state in stateful transducers. Volatiles are faster than atoms but give up atomicity guarantees so should
  ;only be used with thread isolation.
 (def s (volatile! 9))
 @s
@@ -893,6 +910,20 @@ dissoc {:a "s" :b "e"} :a)
 ;13
 
 (def a 7)
-(alter-var-root #'a (fn [x] 3)
+(alter-var-root #'a (fn [x] 3))
 a
+;3
+
+;;Lock / hold monitor
+(def o (Object.)) ;;every object has a monitor, could use a hashmap or anything
+(future (locking o
+          (Thread/sleep 5000)
+          (print "done1")))
+(Thread/sleep 1000) ; give first instance 1 sec to acquire the lock
+(locking o
+  (Thread/sleep 1000)
+  (print "done2"))
+;nil
+;done1done2nil
+(let [a 3] (locking [a] a))
 ;3
