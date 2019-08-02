@@ -26,7 +26,7 @@ ns-2=>(deref (var user/foo)) ;or @(var user/foo)
 ;=> -2/3 inserts into leftmost exprsn in first pos, then the result into the next expsn
 
 (->> 2 (- 4) (/ 3))
-;=> 3/2 inserts into leftmost exprsn in last pos
+;=> 3/2
 
 (as-> 2 x (- x 4) (/ 3 x))
 ;=> -3/2
@@ -58,6 +58,29 @@ java.lang.Thread$UncaughtExceptionHandler
 
 (Character/getNumericValue \0)
 ;0 ;\a = 10 etc
+
+user=> (def wr (java.io.StringWriter.))
+user=> (.append wr " morethan6")
+#object[java.io.StringWriter 0x12ed9db6 " morethan6"]
+user=> (.delete (.getBuffer wr) 4 5)
+#object[java.lang.StringBuffer 0x2a898881 " morthan6"]
+user=> (.toString wr)
+" morthan6"
+user=> (slurp (let [c (char-array 10)] (.getChars (.getBuffer wr) 3 5 c 0) c))
+"rt"
+
+;;bufferedWriter good for wrapping costly writes, such as from FileWriters and OutputStreamWriters
+(def cwr (java.io.CharArrayWriter.))
+(.write cwr "hi!" 0 3)
+(str cwr)
+;"hi!"
+(def wr (java.io.BufferedWriter. cwr 4))
+(.write wr "lo" 0 2)
+(str cwr)
+;"hi!"
+(.write wr "ves" 0 2)
+(str cwr)
+;"hi!love"
 
 (keys (System/getenv))
 ;("PATH" "JAVA_HOME" "TERM" "LANG" "JRE_HOME" "CATALINA_BASE" "JETTY_HOME" "JAVA_MAIN_CLASS_3006" "LOGNAME" "XPC_SERVICE_NAME" "PWD" "TERM_PROGRAM_VERSION" "SHELL" "TERM_PROGRAM" "LSCOLORS" "CATALINA_HOME" "USER" "CLICOLOR" "TMPDIR" "SSH_AUTH_SOCK" "XPC_FLAGS" "TERM_SESSION_ID" "M2_HOME" "__CF_USER_TEXT_ENCODING" "Apple_PubSub_Socket_Render" "HOME" "SHLVL")
@@ -96,9 +119,10 @@ java.lang.Thread$UncaughtExceptionHandler
 ;[1 3]
 
 ;;deps.edn
-{:deps {clj-time {:mvn/version "0.14.2"} org.clojure/core.async {:mvn/version "0.4.500"}}}
+{:deps {clj-time {:mvn/version "0.14.2"} org.clojure/core.async {:mvn/version "0.4.500"} com.fasterxml.jackson.core/jackson-core {:mvn/version "2.9.9"}}}
 ;;clj
 (require '[clj-time.core :as time] '[clojure.core.async :as a])
+(import (com.fasterxml.jackson.core JsonFactory JsonFactory$Feature JsonParser$Feature))
  ;seems to refer to the path to the ns relative to the src/ or src/main/clojure/
 ;or {:deps {org.clojure/data.csv {:git/url "https://github.com/clojure/data.csv.git" :sha "e5beccad0bafdb8e78f19cba481d4ecef5fabf36"}}}
 (use '[clojure.string :only [trim]])
@@ -520,6 +544,8 @@ c
 ;case requires value and will throw error if no default
 (condp = \g \d "hiya" \c "nope" "jump")
 ;"jump"
+(condp instance? {} String "hi" Boolean "ho" clojure.lang.PersistentArrayMap "heya")
+;"heya"
 
 lein deps :tree
 ;all your deps and their deps too
@@ -613,6 +639,8 @@ b
 (.length "tye")
 ;3
 
+;;when you want to initialize or transform a large persistent data structure using multiple steps,
+ ;none of which will be seen by any code other than the constructing/transforming code.
 (persistent! (conj! (pop! (transient [1 2 3])) 4))
 ;[1 2 4] ;can improve performance
 (defn vrange2 [n] (loop [i 0 v (transient [])] (if (< i n) (recur (inc i) (conj! v i)) (persistent! v))))
@@ -927,3 +955,6 @@ a
 ;done1done2nil
 (let [a 3] (locking [a] a))
 ;3
+
+;;JSON
+zinn.formatters.default/json-string-formatter
