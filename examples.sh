@@ -25,26 +25,26 @@ cmd+ cmd-
 ##continue here
 https://support.apple.com/en-ca/guide/terminal/trmlshtcts/mac
 @ Select and find text in a Terminal window
- 
 
-head –n <num> <file> 
+
+head –n <num> <file>
 #First n lines #tail is last
 
-echo "tye" | tr -d "e" 
+echo "tye" | tr -d "e"
 #ty
 echo "tyye" | tr -s "y" "f"
 #tfe
-echo "t.t--y__yee" | tr -cd 'a-zA-Z0-9' 
-#ttyyee 
-echo "t.t--y__yee" | tr -s 'a-zA-Z0-9'  
-#t.t--y__ye 
-echo "t.t" | fold -w 2 . 
-#t. 
+echo "t.t--y__yee" | tr -cd 'a-zA-Z0-9'
+#ttyyee
+echo "t.t--y__yee" | tr -s 'a-zA-Z0-9'
+#t.t--y__ye
+echo "t.t" | fold -w 2 .
+#t.
 #t #(inserted new line)
 find . -type f -exec grep -nH "regex" {} \; #or grep "regex" -rn .
 grep -RnH --exclude-dir={"./Library/Application Support","./whatever"} "regex" .
 #doesn't work
-find . -name '*.txt' 
+find . -name '*.txt'
 
 USER=mitch-kyle
 PARENT_USER=SerenovaLLC
@@ -137,10 +137,14 @@ find / \! -name "*.c" -print
 find / \! \( -newer ttt -user wnj \) -print
 #Print out a list of all the files which are not both newer than ttt and owned by ``wnj''
 
- stringZ=*hi*
- echo "${stringZ//\*/~}"
- #~hi~ #http://tldp.org/LDP/abs/html/string-manipulation.html
- 
+##Strings Maniipulation
+#http://tldp.org/LDP/abs/html/string-manipulation.html
+stringZ=*hi*
+echo "${stringZ//\*/~}"
+#~hi~
+suffix= `expr match "$i" '.*\(\..*\)'`
+#removes .whatever ending from i
+
 if [ 0 -lt 1 ]; then echo sup; fi
 #sup #spaces are important
 if [ ${#2} -gt 0 ]
