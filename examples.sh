@@ -1,3 +1,8 @@
+grep tom /etc/passwd
+#searches passwd for tom
+grep "advance-component" -ir .
+#searches curr directory for any file with advance-component, ignores case
+
 find . -type f -exec <command> {} \;
 #Locate all regular files in the current directory, and execute the given command on each one.
 #-P  #Never follow symbolic links
@@ -154,3 +159,11 @@ find . -type f \( -name "*.sh" -o -name "*.txt" \)
 for i in *.jar; do jar -tvf "$i" | grep -Hsi ClassName && echo "$i"; done
 #searches jar files for classname
 #to also use with find: https://stackoverflow.com/questions/1342894/find-a-class-somewhere-inside-dozens-of-jar-files
+
+echo hi | pbcopy
+#puts hi in the clipboard
+
+> output.txt
+#sends regular output to here
+2> /dev/null
+#sends exception output here

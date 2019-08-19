@@ -1,5 +1,36 @@
 ;;these code snipits and advice are not mine, I just copied these from various websites.
 
+;;For finding and understanding what you have
+(ns-publics '<ns>)
+;{x #'user/x, u #'user/u...} ;map of intern mappings (defined things)
+(ns-publics *ns*)
+;user created vars in current ns
+(ns-map *ns*)
+;all vars in current ns
+(defn b "increments" [a] (inc a))
+(doc b)
+; -------------------------
+; user/b
+; ([a])
+;   increments
+; nil
+;;doesn't work for b
+(source inc)
+;(defn inc
+;  "Returns a number one greater than num. Does not auto-promote
+;  longs, will throw on overflow. See also: inc'"
+;  {:inline (fn [x] `(. clojure.lang.Numbers (~(if *unchecked-math* 'unchecked_inc 'inc) ~x)))
+;   :added "1.2"}
+;  [x] (. clojure.lang.Numbers (inc x)))
+;nil
+(ns a (:gen-class)) ;in src/a.clj
+(defn -main [in] (println (str "Hello " in "!"))) ;in src/a.clj
+{:paths ["src" "classes"]} ;in deps.edn
+mkdir classes ;in terminal
+(compile a) ;in repl
+java -cp `clj -Spath` a World
+;Hello World!
+
 (Character/isAlphabetic <int>)
 ;True if char index is a letter
 
@@ -34,7 +65,7 @@ ns-2=>(deref (var user/foo)) ;or @(var user/foo)
 (def <funcname> (memoize <func>))
 ;Calling funcname will only run once for each unique argument, else return cached result
 
-;;java
+;;java things
 (import java.util.Date) ;or (ns <symbol> (:import (java.util Date)))
 (Date.) ;or (java.util.Date.)
 (. (java.time.LocalDateTime/now) toString)
@@ -81,6 +112,15 @@ user=> (slurp (let [c (char-array 10)] (.getChars (.getBuffer wr) 3 5 c 0) c))
 (.write wr "ves" 0 2)
 (str cwr)
 ;"hi!love"
+(let [console (. System console)] (prn "tell me your password: ") (let [pwd (.readPassword console)] {:dummy :you :dummy-pwd (slurp pwd)}))
+;hides input with ***
+(let [reader (java.io.BufferedReader. *in*) ln (.readLine reader)] (println "your line is " ln))
+trust me
+;your line is  trust me
+(let[pid (read-line) pw (read-line)] (pr pid pw))
+nope
+lol
+;"nope" "lol"nil
 
 (keys (System/getenv))
 ;("PATH" "JAVA_HOME" "TERM" "LANG" "JRE_HOME" "CATALINA_BASE" "JETTY_HOME" "JAVA_MAIN_CLASS_3006" "LOGNAME" "XPC_SERVICE_NAME" "PWD" "TERM_PROGRAM_VERSION" "SHELL" "TERM_PROGRAM" "LSCOLORS" "CATALINA_HOME" "USER" "CLICOLOR" "TMPDIR" "SSH_AUTH_SOCK" "XPC_FLAGS" "TERM_SESSION_ID" "M2_HOME" "__CF_USER_TEXT_ENCODING" "Apple_PubSub_Socket_Render" "HOME" "SHLVL")
@@ -267,13 +307,19 @@ user=> (slurp (let [c (char-array 10)] (.getChars (.getBuffer wr) 3 5 c 0) c))
 ;true
 (satisfies? A H)
 ;true
-(ns-publics '<ns>)
-;{x #'user/x, u #'user/u...} ;map of intern mappings (defined things)
 (find-ns 'user)
 ;#object[clojure.lang.Namespace 0x18230356 "user"]
 (ns-map 'user)
 ;{primitives-classnames #'clojure.core/primitives-classnames, +' #'clojure.core/+'...}
 ;returns map of every symbol available
+(defprotocol Component :extend-via-metadata true (start [component]))
+(def component (with-meta {:name "db"} {`start (constantly "started")}))
+(start component)
+;"started"
+;only works b/c ns has the protocol method signature
+;extends? and satisfies? do not work here
+;Protocol implementations are checked first for direct definitions (defrecord, deftype, reify), then
+;metadata definitions, then external extensions (extend, extend-type, extend-protocol).
 
 (defprotocol A (inc-count [this]))
 (deftype D [count] A (inc-count [this] (+ count 1)))
@@ -474,6 +520,9 @@ d
 (defmacro h4 [] (partial + 1 2))
 ((h4) 2)
 ;No matching ctor
+(defmacro h4 [] `(partial + 1 2))
+((h4) 2)
+;5
 ;;macros should return a symbolic expression
 (defmacro h4 [] `(partial + 1 2)) ;or (defmacro h4 [] '(partial + 1 2)) or (defmacro h4 [] (list partial + 1 2))
 ((h4) 2)
@@ -492,7 +541,13 @@ d
 (def c (m/d (a 7)))
 c
 ;8
-;;macro quotes and escapes can be used in functions, but they can't be evaluated without going back into a macro
+;;;When you quote a collection with the backtick, it tries to find each symbol's namespace. If it can't find
+;one, it uses the current namespace. If you specify a namespace, it works the same as ' with a qualified namespace.
+;;;When you are using ~ inside ` the form will simply be unquoted. This is helpful for building macros where the
+;macro uses symbols from the namespace it is defined in as well as symbols from the namespace where it is used.
+`(+ ~@`(x x))
+;(clojure.core/+ user/x user/x)
+;;backquotes and escapes can be used in functions, but they can't be evaluated without going back into a macro
 (defn e [x] `(inc ~x))
 (e 4)
 ;(clojure.core/inc 4)
@@ -658,7 +713,9 @@ b
 (reduce-kv (fn [a x y] (+ (case x "a" (* 3 y) "b" (* 4 y)) a)) 0 {"a" 1 "b" 2})
 ;11
 
- ;;Strings
+ ;;Strings things
+ (clojure.string/split "t y" #"\s")
+;["t" "y"]
 (clojure.string/replace "class ns.ns2.ns3.name" #"(.*)\.(.*)$" "$2")
 ;"name"
 (clojure.string/replace "thing" "t" "")
@@ -802,24 +859,12 @@ potemkin/import-macro
 (test #'b)
 ;Execution error (AssertionError) at user/fn (REPL:1).
 ;Assert failed: (= b 2)
-(doc b)
-;-------------------------
-;user/b
-;  sup
-;nil
-
-(source inc)
-;(defn inc
-;  "Returns a number one greater than num. Does not auto-promote
-;  longs, will throw on overflow. See also: inc'"
-;  {:inline (fn [x] `(. clojure.lang.Numbers (~(if *unchecked-math* 'unchecked_inc 'inc) ~x)))
-;   :added "1.2"}
-;  [x] (. clojure.lang.Numbers (inc x)))
-;nil
 
 (throw (Exception. "clojure machine broke"))
 ;Execution error at n/eval219 (REPL:1).
 ;clojure machine broke
+(Throwable->map (Exception. "trouble"))
+;makes a nice map
 
 (filter #{:a :b} '(:a :b :c :d))
 ;(:a :b)
@@ -912,10 +957,6 @@ potemkin/import-macro
 (find {:a 1} :a)
 ;[:a 1]
 
-;;Strings
-(clojure.string/split "t y" #"\s")
- ;["t" "y"]
-
 *file*
 ;"NO_SOURCE_PATH"
 
@@ -958,3 +999,11 @@ a
 
 ;;JSON
 zinn.formatters.default/json-string-formatter
+
+(require '[clojure.inspector :as ins])
+(ins/inspect-tree {:a 1 :b {:c [2 3 4]}})
+;opens a neat little GUI
+;also inspect and inspect-table
+
+(javadoc java.lang.Appendable)
+;opens https://docs.oracle.com/javase/8/docs/api/java/lang/Appendable.html in browser
