@@ -9,9 +9,12 @@ find . -type f -exec <command> {} \;
 #-mtime -1  #files last accessed less than a day ago #-amin #for minutes
 #-cmin n #File's status was last changed n minutes ago. #also -ctime n
 #-name pattern #finds file name
+find . -type d -maxdepth 1 -execdir echo {} \;
+#prints the immediate subfolders
 find . -name "*.clj" -exec grep "/status" -rn {} \;
 find . -path "./sr*sc"
 #will print an entry for a directory called `./src/misc'
+find . -depth 2 -name "*.clj"
 
 ^w altd
 #delete from cursor to word beginning, delete from cursor to line end
@@ -104,12 +107,17 @@ ls -S
 #sort by file size
 ls -sh
 #print allocated file space in human readable form
+ls -t
+#last modified first
 find . -maxdepth 1 -type f
 #prints all files in dir
 ls -FA | grep -v /
 #excludes all strings with /
 ls -al | grep '^-'
 #excludes all strings starting with -
+
+du -d 1 -h | sort -hr
+#lists folders by disk size
 
 less <path/filename>
 #type /<word><enter> to search, press n to go to next instance, N to go to previous. option-u unhighlights search.

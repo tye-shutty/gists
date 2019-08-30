@@ -72,6 +72,8 @@ ns-2=>(deref (var user/foo)) ;or @(var user/foo)
 ;"2019-07-12T16:02:58.825"
 (.parse (java.text.SimpleDateFormat. "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") "1985-04-12T23:20:50.52Z")
 ;#inst "1985-04-13T03:20:50.052-00:00"
+(.format (java.text.SimpleDateFormat. "yyyy-MM-dd'T'mm:ss.SSS'Z'") (Date.))
+;"2019-08-29T27:58.280Z"
 (. #inst "1985-04-12T23:20:50.52Z" getTime) #_or (.getTime #inst "1985-04-12T23:20:50.52Z")
 ;482196050520
 ;;https://github.com/dm3/clojure.java-time
@@ -124,6 +126,7 @@ lol
 
 (keys (System/getenv))
 ;("PATH" "JAVA_HOME" "TERM" "LANG" "JRE_HOME" "CATALINA_BASE" "JETTY_HOME" "JAVA_MAIN_CLASS_3006" "LOGNAME" "XPC_SERVICE_NAME" "PWD" "TERM_PROGRAM_VERSION" "SHELL" "TERM_PROGRAM" "LSCOLORS" "CATALINA_HOME" "USER" "CLICOLOR" "TMPDIR" "SSH_AUTH_SOCK" "XPC_FLAGS" "TERM_SESSION_ID" "M2_HOME" "__CF_USER_TEXT_ENCODING" "Apple_PubSub_Socket_Render" "HOME" "SHLVL")
+;can store build tag and git commit here
 (System/getenv "PWD")
 ;"/Users/tshutty/gists"
 (. System nanoTime) ;also currentTimeMillis since 1970
@@ -134,6 +137,9 @@ lol
 ;"you"
 (keys (System/getProperties))
 ;("java.runtime.name" "sun.boot.library.path" "java.vm.version" "gopherProxySet" "java.vm.vendor" "java.vendor.url" "path.separator" "java.vm.name" "file.encoding.pkg" "user.country" "sun.java.launcher" "sun.os.patch.level" "java.vm.specification.name" "user.dir" "java.runtime.version" "java.awt.graphicsenv" "java.endorsed.dirs" "os.arch" "java.io.tmpdir" "line.separator" "java.vm.specification.vendor" "os.name" "sun.jnu.encoding" "java.library.path" "java.specification.name" "java.class.version" "sun.management.compiler" "THE_MOST_BEAUTIFUL" "os.version" "http.nonProxyHosts" "user.home" "user.timezone" "java.awt.printerjob" "file.encoding" "java.specification.version" "java.class.path" "user.name" "clojure.libfile" "java.vm.specification.version" "sun.java.command" "java.home" "sun.arch.data.model" "user.language" "java.specification.vendor" "awt.toolkit" "java.vm.info" "java.version" "java.ext.dirs" "sun.boot.class.path" "java.vendor" "file.separator" "java.vendor.url.bug" "sun.io.unicode.encoding" "sun.cpu.endian" "socksNonProxyHosts" "ftp.nonProxyHosts" "sun.cpu.isalist")
+
+(java.util.Collections/binarySearch [0 1 1 2 2 3] 2 compare)
+;4
 
 ;;destructuring / dereferencing
 (let [{:keys [a c]} {:a 1 :b 2 :c 3} {:keys [d e]} {:d 4 :e 3}] (+ a d))
@@ -343,6 +349,15 @@ lol
 (defprotocol user/B (c [this]) (d [this]))
 (c (reify B (c [this] (inc (d this))) (d [this] 5)))
 ;6
+(defprotocol A (func1 [this]))
+(defprotocol B (func2 [this x]))
+(defrecord C [y] A (func1 [this] "bazinga") B (func2 [this x] (str (.y this) " " x)))
+(defprotocol D (func3 [this z]))
+(extend-protocol D C (func3 [this z] "it's a boy!"))
+(let [obj (->C 5)] (prn (func1 obj)) (prn (func2 obj 4)) (func3 obj 6)) ;or (let [obj (C. 5)] ...
+;"bazinga"
+;"5 4"
+;"it's a boy!"
 
 (defn c [x] (inc x))
 (let [x c] (x 4))
@@ -712,6 +727,8 @@ b
 ;false
 (reduce-kv (fn [a x y] (+ (case x "a" (* 3 y) "b" (* 4 y)) a)) 0 {"a" 1 "b" 2})
 ;11
+(reduce-kv #(if (= %3 2) (reduced %2) (inc %)) 0 {0 4 1 6 2 7 3 5 4 2})
+;4
 
  ;;Strings things
  (clojure.string/split "t y" #"\s")
@@ -865,6 +882,8 @@ potemkin/import-macro
 ;clojure machine broke
 (Throwable->map (Exception. "trouble"))
 ;makes a nice map
+(try (throw (ex-info "oopsie" {:wow "such bad"})) (catch Exception e [(.getMessage e) (.data e)]))
+;["oopsie" {:wow "such bad"}]
 
 (filter #{:a :b} '(:a :b :c :d))
 ;(:a :b)
@@ -1007,3 +1026,16 @@ zinn.formatters.default/json-string-formatter
 
 (javadoc java.lang.Appendable)
 ;opens https://docs.oracle.com/javase/8/docs/api/java/lang/Appendable.html in browser
+
+((fnil + 1) nil 2)
+;3 ;calls + with 1 if first arg is nil, else calls + with input
+
+;;removing items from a coll
+(let [coll '(1 2 3)] (time (concat (rest (filter #{2} coll)) (remove #{2} coll))))
+;"Elapsed time: 0.035528 msecs"
+(let [coll {1 1 2 2 3 3}] (time (dissoc coll 2)))
+;"Elapsed time: 0.026063 msecs"
+(let [coll (sorted-map 1 1 2 2 3 3)] (time (dissoc coll 2)))
+;"Elapsed time: 0.014104 msecs"
+(let [coll [1 2 3]] (time (loop [pos 0] (if (>= pos (count coll)) (* -1 pos) (if (= (coll pos) 2) (vec (concat (subvec coll 0 pos) (subvec coll (inc pos)))) (recur (inc pos)))))))
+;"Elapsed time: 0.136273 msecs"
