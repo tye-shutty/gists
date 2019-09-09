@@ -16,11 +16,16 @@ find . -path "./sr*sc"
 #will print an entry for a directory called `./src/misc'
 find . -depth 2 -name "*.clj"
 
-^w altd
-#delete from cursor to word beginning, delete from cursor to line end
-
+stty -a
+#shows terminal shortcuts (isn't always correct)
+^w (mac) or opt-backspace (centos)
+#delete from cursor to word beginning
+^w (centos)
+#delete from cursor to line end (centos)
+altd
+#delete from cursor to line end (mac) from cursor to word end (centos)
 ^c  ^u ^k
-#exit command, clear line before cursor, clear line after and including cursor
+#exit command, clear line before cursor (mac) clear line (centos), clear line after and including cursor
 ^a ^e ^t
 #line start, line end, swaps this char with previous and advances cursor,
 
