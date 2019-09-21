@@ -1,4 +1,8 @@
-:vs <path> 
+:vs <path>
 " creates a new vim file and opens it in this window
+
 :source ~/.vimrc
 " reloads vimrc
+
+If you want to copy paste contents from an external program into vim, first copy your text into system clipboard via Ctrl + C ,
+then in vim editor insert mode, click the mouse middle button (usually the wheel) or press Ctrl + Shift + V to paste.

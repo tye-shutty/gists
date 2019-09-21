@@ -14,7 +14,7 @@ git checkout tags/<tag_name>
 git checkout -
 #switches to previous version checkedout
 git checkout master
-#switches to most recent version
+#switches to most recent version; use -f to delete changes.
 
 git checkout -b B <sha1 id of the commit B>
 #-b creates new branch with B name at this commit
@@ -25,6 +25,8 @@ git merge B
 
 git clean -f
 #removes never staged files
+git rm --cached <file>
+#removes file from the index
 git checkout -- .
 #reverts unstaged changes in staged files to last commit
 git reset --hard <commit id>
@@ -53,6 +55,8 @@ git diff
 #shows unstaged changes
 git diff --cached
 #shows staged changes
+git reset -- <filePath>
+#removes from index without deleting file
 git diff HEAD
 #shows staged and unstaged changes
 git diff --check
@@ -64,6 +68,8 @@ git merge --squash HEAD@{1}
 #there may be better ways:
 git reset --soft HEAD~2 && git commit -m "message"
 #combines last two commits
+git commit --amend
+#edits last commit message locally
 
 git cherry-pick <commitID>
 #merges that commit into current branch

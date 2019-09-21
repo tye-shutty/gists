@@ -1,0 +1,47 @@
+[^] ;Not these chars
+
+[][] ;Sequence of options
+
+[]{n,m} ;n-m repetition of options
+
+. ;Any char
+
+[]+ ;At least one of
+
+[]* ;0 or more of
+
+[]? ;0 or 1
+
+\ ;escape
+
+^ ;Line beginning
+$ ;Line end
+
+() ;Capture (can be nested)
+$1 refers to first capture
+
+(|) ;OR (can be nested
+
+[:alnum:]
+;[A-Za-z0-9]
+;alnum, digit, punct, alpha, graph, space, blank, lower, upper, cntrl, print, xdigit
+;https://en.wikibooks.org/wiki/Regular_Expressions/POSIX_Basic_Regular_Expressions#Character_classes
+[[:<:]]
+;and `[[:>:]]' ;match the null string at the beginning and end of a word (sequence of alnum or _) respectively.
+
+;;A `\Q' sequence causes literal (``quote'') mode to be entered, while `\E' ends literal mode, and returns to normal regular expression processing.
+
+;;ENHANCED FEATURES
+\<  Matches the null string at the beginning of a word.  This is equivalent to `[[:<:]]'.
+\>  Matches the null string at the end of a word.  This is equivalent to `[[:>:]]'.
+\b  Matches the null string at a word boundary (either the beginning or end of a word).
+\B  Matches the null string where there is no word boundary.  This is the opposite of `\b'.
+\t  The ``horizontal-tab'' character (ASCII code 9).
+\s ;Whitespace
+\S ;Non whitespace
+\d ;Digit
+\D ;Non digits
+\w ;Any alphanumeric
+\W ;Non alphanumeric
+\r  The ``carriage-return'' character (ASCII code 13).
+\n The ``new-line/line-feed'' character (ASCII code 10).
