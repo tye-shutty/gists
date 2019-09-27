@@ -61,6 +61,9 @@ git diff HEAD
 #shows staged and unstaged changes
 git diff --check
 #shows whitespace problems
+git fetch origin
+git diff remotes/origin/master master
+#compares remote to local
 
 ##squashing commits:
 git reset --hard <commit id from before your changes>

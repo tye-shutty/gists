@@ -180,3 +180,9 @@ echo hi | pbcopy
 #sends regular output to here
 2> /dev/null
 #sends exception output here
+
+perl -0pi.bak -e 's:<a\ href=\"signup.html\">Signup</a>\n:test:gi' webapp/*.html
+#finds and replaces multiline regex across multiple files
+
+htop
+#see running processes
