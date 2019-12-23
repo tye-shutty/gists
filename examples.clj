@@ -128,7 +128,7 @@ lol
 ;("PATH" "JAVA_HOME" "TERM" "LANG" "JRE_HOME" "CATALINA_BASE" "JETTY_HOME" "JAVA_MAIN_CLASS_3006" "LOGNAME" "XPC_SERVICE_NAME" "PWD" "TERM_PROGRAM_VERSION" "SHELL" "TERM_PROGRAM" "LSCOLORS" "CATALINA_HOME" "USER" "CLICOLOR" "TMPDIR" "SSH_AUTH_SOCK" "XPC_FLAGS" "TERM_SESSION_ID" "M2_HOME" "__CF_USER_TEXT_ENCODING" "Apple_PubSub_Socket_Render" "HOME" "SHLVL")
 ;can store build tag and git commit here
 (System/getenv "PWD")
-;"/Users/tshutty/gists"
+;"/Users/tshutty/gists" ;classpath
 (. System nanoTime) ;also currentTimeMillis since 1970
 ;49208602330574 relative to arbitrary origin
 (System/setProperty "THE_MOST_BEAUTIFUL" "you")
@@ -718,6 +718,8 @@ b
 
 (reduce f val coll)
 ;If val is not supplied, returns the result of applying f to the first 2 items in coll, then applying f to that result and the 3rd item, etc.
+(reduce #(/ %1 %2) 1 [3, 2])
+;1/6
 (reduce-kv #(conj % (str "pos: " %2 " val " %3 )) ["init!"] [3 4 5])
 ;["init!" "pos: 0 val 3" "pos: 1 val 4" "pos: 2 val 5"]
 ;also works with maps
@@ -950,6 +952,8 @@ potemkin/import-macro
 ;clojure.lang.LazySeq
 (drop 2 [ 1 2 3])
 ;(3)
+(subvec v start end)
+; start is index, end is index+1
 
 ;;Maps
 (#{:a :b} :a)
@@ -1039,3 +1043,13 @@ zinn.formatters.default/json-string-formatter
 ;"Elapsed time: 0.014104 msecs"
 (let [coll [1 2 3]] (time (loop [pos 0] (if (>= pos (count coll)) (* -1 pos) (if (= (coll pos) 2) (vec (concat (subvec coll 0 pos) (subvec coll (inc pos)))) (recur (inc pos)))))))
 ;"Elapsed time: 0.136273 msecs"
+
+(denominator r)
+;demoninator of ratio ; also numerator
+
+(nth (iterate f x) n)
+; repeats a function n times
+
+(use 'clojure.stacktrace)
+(print-stack-trace *e)
+; finds the answers

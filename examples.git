@@ -16,6 +16,12 @@ git checkout -
 git checkout master
 #switches to most recent version; use -f to delete changes.
 
+##easy rebase
+git pull --rebase origin master
+
+##checkout remote branch
+git checkout -b test origin/test
+
 git checkout -b B <sha1 id of the commit B>
 #-b creates new branch with B name at this commit
 git rebase --no-ff HEAD~1
@@ -64,6 +70,8 @@ git diff --check
 git fetch origin
 git diff remotes/origin/master master
 #compares remote to local
+git diff --stat origin/master  master
+#shows files and # of lines changed
 
 ##squashing commits:
 git reset --hard <commit id from before your changes>
@@ -91,3 +99,8 @@ retest this please
 
 basename -s .git `git config --get remote.origin.url`
 #shows name of project
+
+git config -l
+#shows all configured variables
+git config --global <variable> <value>
+#sets the value
