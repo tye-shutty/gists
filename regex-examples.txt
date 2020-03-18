@@ -45,3 +45,6 @@ $1 refers to first capture
 \W ;Non alphanumeric
 \r  The ``carriage-return'' character (ASCII code 13).
 \n The ``new-line/line-feed'' character (ASCII code 10).
+
+(/\*\*.*(\n.*\*.*)*\n)|//.*\n
+ ;removes auto-generated comments from IBM rational software architecture designer

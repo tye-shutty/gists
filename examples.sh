@@ -186,3 +186,6 @@ perl -0pi.bak -e 's:<a\ href=\"signup.html\">Signup</a>\n:test:gi' webapp/*.html
 
 htop
 #see running processes
+
+rename a2 a3 */a2*
+#replaces all instance of a2 with a3 in filenames starting with a2 in subfolders of current dir 
