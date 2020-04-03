@@ -103,6 +103,7 @@ for i in $( ls ); do
 done
 
 open .
+gio open .
 #opens current dir in finder
 open -a /Applications/Microsoft\ Word.app project.clj
 
@@ -185,7 +186,11 @@ perl -0pi.bak -e 's:<a\ href=\"signup.html\">Signup</a>\n:test:gi' webapp/*.html
 #finds and replaces multiline regex across multiple files
 
 htop
+top
 #see running processes
 
 rename a2 a3 */a2*
-#replaces all instance of a2 with a3 in filenames starting with a2 in subfolders of current dir 
+#replaces all instance of a2 with a3 in filenames starting with a2 in subfolders of current dir
+
+sed -n '1,10p' file1 > file2
+#copy first 10 lines into file2

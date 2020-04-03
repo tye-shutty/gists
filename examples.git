@@ -104,3 +104,7 @@ git config -l
 #shows all configured variables
 git config --global <variable> <value>
 #sets the value
+
+git fetch origin master
+git pull
+#updates local repo
