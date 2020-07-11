@@ -194,3 +194,25 @@ rename a2 a3 */a2*
 
 sed -n '1,10p' file1 > file2
 #copy first 10 lines into file2
+
+source tests; test1
+#calls the test1 function in the tests file
+
+diff 	<(printf "2 5\n40 10\n" | ./d F 20 a)
+<(printf "Head movement required = 20\nTime required = 45\n")
+#compares string to result of string piped to ./d call
+
+printf "hi\nyou\n" | diff - t
+# compares piped string to contents of file t
+
+grep "+" -irn --include *.clj
+#searches for plus recursively with line numbers in all clj files
+
+grep "+" -irn --include *.clj | wc -l
+#counts lines returned
+
+cat > may1.txt
+#prints following text to file, until EOF
+
+which java
+#prints location of program

@@ -28,6 +28,9 @@ services > rds > databases > writer > actions >failover
 #sending files
 scp -i "~/aws-ubuntu.pem" -r ~/codebase/swe4103-team-1/Project ubuntu@ec2-18-222-250-155.us-east-2.compute.amazonaws.com:~/
 	# add r to send folders
+scp -r tshutty@fcslinux.cs.unb.ca:~/.mozilla/firefox/9hei58zo.default-1528038513469-1567872944774 ~
+    #works both ways
+    
 sudo find / -iname xampp
 # /opt/lampp/share/xampp
 # /opt/lampp/xampp

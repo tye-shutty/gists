@@ -1,3 +1,25 @@
+0
+git fetch origin (to see new updates)
+1
+git checkout -b temp (start work, can specify commit after name)
+2
+git push origin temp (to save work)
+3
+git rebase -i master (squash commits)
+4
+git checkout master
+5
+git merge temp
+6
+git push origin master
+7
+git branch -d temp
+8
+git push -d origin temp (delete remote)
+
+git checkout -b test origin/test
+##checkout remote branch
+
 git stash
 # saves and removes staged changes
 git stash list
@@ -11,76 +33,22 @@ git tag –l
 #Lists all the tags (versions)
 git checkout tags/<tag_name>
 #To switch to that version
-git checkout -
-#switches to previous version checkedout
-git checkout master
-#switches to most recent version; use -f to delete changes.
 
-##easy rebase
-git pull --rebase origin master
+git diff HEAD
+#shows staged changes
 
-##checkout remote branch
-git checkout -b test origin/test
-
-git checkout -b B <sha1 id of the commit B>
-#-b creates new branch with B name at this commit
-git rebase --no-ff HEAD~1
-git checkout master
-git merge B
-#sequence to merge an old commit back into head
-
-git clean -f
-#removes never staged files
 git rm --cached <file>
 #removes file from the index
-git checkout -- .
-#reverts unstaged changes in staged files to last commit
-git reset --hard <commit id>
-#resets to commit
-git push --force origin master
-#Resets origin to local commit
 
-git fetch origin
-git reset --hard origin/master
-#resets local to remote
-
-reporting-pub tshutty$ git branch --list -a "*m*" --contains 85ce0f96b9cc3dd244ecd57ae99c6715d15e7009
+git branch --list -a "*m*" --contains 85ce0f96b9cc3dd244ecd57ae99c6715d15e7009
 #lists local and remote branches that start with m (includes the remote repo name) and contain this commit
 #--no-contains is opposite
 --merged gets branches that have been completely merged into this commit (or HEAD if none specified)
 
-##pushing will send the branch you are on to the branch you specify in the remote, if it doesn't exit it will be created.
-
-git branch <branch> -d
-#deletes branch
-
-git branch -m <nameold> <namenew>
-#renames branch
-
-git diff
-#shows unstaged changes
-git diff --cached
-#shows staged changes
-git reset -- <filePath>
-#removes from index without deleting file
-git diff HEAD
-#shows staged and unstaged changes
-git diff --check
-#shows whitespace problems
-git fetch origin
 git diff remotes/origin/master master
-#compares remote to local
+#compares branches
 git diff --stat origin/master  master
 #shows files and # of lines changed
-
-##squashing commits:
-git reset --hard <commit id from before your changes>
-git merge --squash HEAD@{1}
-#there may be better ways:
-git reset --soft HEAD~2 && git commit -m "message"
-#combines last two commits
-git commit --amend
-#edits last commit message locally
 
 git cherry-pick <commitID>
 #merges that commit into current branch
@@ -94,9 +62,6 @@ git diff branch_1..branch_2 <file>
 git log -S "1.1.0-SNAPSHOT"
 #finds when that was created/destroyed
 
-##for serenova PR webhook type this comment to retest in jenkins
-retest this please
-
 basename -s .git `git config --get remote.origin.url`
 #shows name of project
 
@@ -104,7 +69,3 @@ git config -l
 #shows all configured variables
 git config --global <variable> <value>
 #sets the value
-
-git fetch origin master
-git pull
-#updates local repo

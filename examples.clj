@@ -168,6 +168,10 @@ lol
 {:deps {clj-time {:mvn/version "0.14.2"} org.clojure/core.async {:mvn/version "0.4.500"} com.fasterxml.jackson.core/jackson-core {:mvn/version "2.9.9"}}}
 ;;clj
 (require '[clj-time.core :as time] '[clojure.core.async :as a])
+;;idiom:
+(ns project.core
+    (:require [ring.middleware.reload :refer [wrap-reload]]))
+
 (import (com.fasterxml.jackson.core JsonFactory JsonFactory$Feature JsonParser$Feature))
  ;seems to refer to the path to the ns relative to the src/ or src/main/clojure/
 ;or {:deps {org.clojure/data.csv {:git/url "https://github.com/clojure/data.csv.git" :sha "e5beccad0bafdb8e78f19cba481d4ecef5fabf36"}}}
@@ -1053,3 +1057,6 @@ zinn.formatters.default/json-string-formatter
 (use 'clojure.stacktrace)
 (print-stack-trace *e)
 ; finds the answers
+
+(System/getProperty "user.dir")
+; current directory
