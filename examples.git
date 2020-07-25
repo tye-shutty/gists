@@ -7,14 +7,16 @@ git push origin temp (to save work)
 3
 git rebase -i master (squash commits)
 4
-git checkout master
+git merge master (in case of changes)
 5
-git merge temp
+git checkout master
 6
-git push origin master
+git merge temp
 7
-git branch -d temp
+git push origin master
 8
+git branch -d temp
+9
 git push -d origin temp (delete remote)
 
 git checkout -b test origin/test
