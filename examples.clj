@@ -1,6 +1,6 @@
 ;;these code snipits and advice are not mine, I just copied these from various websites.
 
-;;For finding and understanding what you have
+;;For finding all symbols in ns
 (ns-publics '<ns>)
 ;{x #'user/x, u #'user/u...} ;map of intern mappings (defined things)
 (ns-publics *ns*)
@@ -1056,7 +1056,7 @@ zinn.formatters.default/json-string-formatter
 
 (use 'clojure.stacktrace)
 (print-stack-trace *e)
-; finds the answers
+; full stack trace
 
 (System/getProperty "user.dir")
 ; current directory

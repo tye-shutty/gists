@@ -1,3 +1,13 @@
+$PATH
+#searches in these directories for files and folders with name of leading variable in a command
+which java
+#returns location where $PATH finds this variable
+#alternative: type java
+ls -l
+#returns location symlinks point to
+sudo find / -iname java -exec echo {} \; -exec ls -l {} \;
+#returns all java files and folders and subfiles and subfolders
+
 grep tom /etc/passwd
 #searches passwd for tom
 grep "advance-component" -ir .
@@ -194,6 +204,10 @@ rename a2 a3 */a2*
 
 sed -n '1,10p' file1 > file2
 #copy first 10 lines into file2
+find . -type f -name '*.java' -exec sed -i '1 i\package Quarto;' {} \;
+#add new first line to multiple files.
+find . -type f -name '*.java' -exec sed -i '1d' {} \;
+#remove first line
 
 source tests; test1
 #calls the test1 function in the tests file
@@ -216,3 +230,6 @@ cat > may1.txt
 
 which java
 #prints location of program
+
+tput reset
+#really clears terminal 

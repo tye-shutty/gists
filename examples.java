@@ -14,3 +14,5 @@ public class TimeObjectF1 extends TimeObject {
 		System.out.println(String.format("Date: %1$tm/%1$td/%1$ty\nTime: %1$tH:%1$tS:%1$tM",curr));
 	}
 }
+//java -classpath "/home/tye/Dropbox/cs4725/quarto/RobotMessiah/target/test-classes:/home/tye/Dropbox/cs4725/quarto/RobotMessiah/target/classes" Quarto.Tests
+//How to run things in maven
